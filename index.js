@@ -38,20 +38,57 @@ class Tree{
             }
         }
     }
-// fix delete for case 1,2, and case 3
     delete(value){
+        this.root = this._deleteCall(this.root,value)
+    }
+    _deleteCall(current,value){
+        if(!current){
+            return null;
+        }
+
+        if(value === current.value){
+            if(!current.left){
+                return current.right
+            }
+            if(!current.right){
+                return current.left
+            }
+
+            const successor = this._findMin(current.right)
+            current.value = successor.value;
+            current.right = this._deleteCall(current.right,successor.value)
+
+        }else if(value< current.value){
+            current.left = this._deleteCall(current.left,value)
+        }else{
+            current.right = this._deleteCall(current.right,value)
+        }
+        return current
+    }
+    _findMin(node){
+        while(node.left){
+            node = node.left
+        }
+        return node;
+    }
+    find(value){
         if(!this.root){
             return null;
         }
-        let current = this.root;
-
-        while(current.value){
+        let current = this.root
+        while(current){
             if(value === current.value){
-                current.value = null
-                return current.value;
+                return current.value
+            }else if(value < current.value){
+                current = current.left
+            }else{
+                current = current.right
             }
-            current.value = current.left
         }
+        return null;
+    }
+    levelOrder(value){
+        
     }
 }
 
@@ -74,9 +111,9 @@ function buildTree(array){
     return root;
 }
 
-const sortedArray = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+const sortedArray = [1, 2, 3, 4, 5, 6, 7,9,10]
 const tryNode = new Tree(sortedArray)
-tryNode.insert(10)
+tryNode.insert(8)
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
     if (node === null) {
@@ -91,6 +128,8 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
     }
 };
 prettyPrint(tryNode.root)
-tryNode.delete(1)
+tryNode.delete(9)
 prettyPrint(tryNode.root)
+console.log("Find method: ",tryNode.find(10))
+
 
