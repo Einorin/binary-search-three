@@ -87,9 +87,32 @@ class Tree{
         }
         return null;
     }
-    levelOrder(value){
+    levelOrder(callback){
+        if(!this.root){
+            return [];
+        }
+        let tempArr = [this.root];
+        let levelOrdered = [this.root];
         
+        while(tempArr.length > 0){
+            const current = tempArr.shift();
+            callback(current.value);
+    
+            if(current.left){
+                tempArr.push(current.left);
+                levelOrdered.push(current.left);
+            }
+            if(current.right){
+                levelOrdered.push(current.right);
+                tempArr.push(current.right);
+            }
+        }
+        
+        if(!callback){
+            return levelOrdered;
+        }
     }
+    
 }
 
 function buildTree(array){
@@ -132,4 +155,11 @@ tryNode.delete(9)
 prettyPrint(tryNode.root)
 console.log("Find method: ",tryNode.find(10))
 
+// use levelOrder with function
+tryNode.levelOrder(value=>{
+    console.log("levelOrder", value)
+})
+// use levelOrder without function
+const levelOrderedValues = tryNode.levelOrder();
 
+console.log(levelOrderedValues);
