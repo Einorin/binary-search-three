@@ -96,7 +96,11 @@ class Tree{
         
         while(tempArr.length > 0){
             const current = tempArr.shift();
-            callback(current.value);
+            if(!callback){
+                levelOrdered.push(current.value)
+            }else{
+                callback(current.value);
+            }
     
             if(current.left){
                 tempArr.push(current.left);
@@ -112,7 +116,7 @@ class Tree{
             return levelOrdered;
         }
     }
-    
+        
 }
 
 function buildTree(array){
@@ -159,7 +163,6 @@ console.log("Find method: ",tryNode.find(10))
 tryNode.levelOrder(value=>{
     console.log("levelOrder", value)
 })
-// use levelOrder without function
+// use levelOrder without function // there's a problem when I don't provide a function
 const levelOrderedValues = tryNode.levelOrder();
-
 console.log(levelOrderedValues);
