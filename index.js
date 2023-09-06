@@ -92,7 +92,7 @@ class Tree{
             return [];
         }
         let tempArr = [this.root];
-        let levelOrdered = [this.root];
+        let levelOrdered = [];
         
         while(tempArr.length > 0){
             const current = tempArr.shift();
@@ -104,10 +104,10 @@ class Tree{
     
             if(current.left){
                 tempArr.push(current.left);
-                levelOrdered.push(current.left);
+                // levelOrdered.push(current.left);
             }
             if(current.right){
-                levelOrdered.push(current.right);
+                // levelOrdered.push(current.right);
                 tempArr.push(current.right);
             }
         }
@@ -116,7 +116,56 @@ class Tree{
             return levelOrdered;
         }
     }
-        
+    preorder(callback){
+        function traverse(node,resultArray){
+            if(node){
+                resultArray.push(node.value)
+                if(callback){
+                    callback(node.value)
+                }
+                traverse(node.left,resultArray)
+                traverse(node.right,resultArray)
+            }
+        }
+        const result = []
+        traverse(this.root,result)
+        return result
+    } 
+    inorder(callback) {
+        function traverse(node, resultArray) {
+          if (!node) {
+            return;
+          }
+          
+          traverse(node.left, resultArray);
+          resultArray.push(node.value)
+          if (callback) {
+            callback(node.value);
+          }
+          
+          traverse(node.right, resultArray);
+        }
+      
+        const result = [];
+        traverse(this.root, result);
+        return result;
+      }
+    postorder(callback){
+        function traverse(node, resultArray){
+            if(!node){
+                return;
+            }
+            traverse(node.right,resultArray)
+            traverse(node.left,resultArray)
+            resultArray.push(node.value)
+            if(callback){
+                callback(node.value)
+            }
+        }
+        const result = []
+        traverse(this.root, result)
+        return result
+    }
 }
 
 function buildTree(array){
@@ -141,7 +190,7 @@ function buildTree(array){
 const sortedArray = [1, 2, 3, 4, 5, 6, 7,9,10]
 const tryNode = new Tree(sortedArray)
 tryNode.insert(8)
-
+ 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
     if (node === null) {
       return;
@@ -163,6 +212,35 @@ console.log("Find method: ",tryNode.find(10))
 tryNode.levelOrder(value=>{
     console.log("levelOrder", value)
 })
-// use levelOrder without function // there's a problem when I don't provide a function
+// use levelOrder without function
 const levelOrderedValues = tryNode.levelOrder();
-console.log(levelOrderedValues);
+console.log("levelOrder",levelOrderedValues);
+
+
+// use preorder with function parameter
+tryNode.preorder(value=>{
+    console.log("preorder", value)
+})
+
+// use preorder withour funcntion parameter
+const preorderNoFunction = tryNode.preorder()
+console.log("preorder",preorderNoFunction)
+
+// use preorder with function parameter
+tryNode.inorder(value=>{
+    console.log("inorder", value)
+})
+
+// use preorder withour funcntion parameter
+const inorderNoFunction = tryNode.inorder()
+console.log("inorder",inorderNoFunction)
+
+
+// use postorder with function
+tryNode.postorder(value =>{
+    console.log("postorder",value)
+})
+
+// use postorder without function 
+const postorderNoFunction = tryNode.postorder()
+console.log(postorderNoFunction)
